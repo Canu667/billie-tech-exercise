@@ -1,0 +1,66 @@
+{
+	"info": {
+		"_postman_id": "b558b28b-8ece-4c78-b318-dbd5f8c5adfe",
+		"name": "Billie",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Like",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"user_id\": 1}"
+				},
+				"url": {
+					"raw": "localhost/like",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"like"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SendEmail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"user_id\" : 22\n}"
+				},
+				"url": {
+					"raw": "localhost:81/send-email",
+					"host": [
+						"localhost"
+					],
+					"port": "81",
+					"path": [
+						"send-email"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

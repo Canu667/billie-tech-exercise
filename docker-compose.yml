@@ -1,0 +1,53 @@
+version: '3'
+services:
+    liker-nginx:
+        image: nginx:latest
+        ports:
+            - "80:80"
+        volumes:
+            - ./devops/nginx/liker-nginx.conf:/etc/nginx/conf.d/default.conf
+        links:
+            - liker-app
+
+    liker-app:
+        container_name: liker-app
+        image: nanoninja/php-fpm
+        expose:
+            - "9000"
+        volumes:
+            - ./liker:/var/www/html
+            - ./devops/wait-for-it.sh:/var/www/html/wait-for-it.sh
+        links:
+            - db
+            - mailer-nginx
+        depends_on:
+            - db
+            - mailer-nginx
+
+    mailer-nginx:
+        container_name: mailer
+        image: nginx:latest
+        ports:
+            - "80"
+            - "81:80"
+        volumes:
+            - ./devops/nginx/mailer-nginx.conf:/etc/nginx/conf.d/default.conf
+        links:
+            - mailer-app
+
+    mailer-app:
+        container_name: mailer-app
+        image: nanoninja/php-fpm
+        expose:
+            - "9000"
+        volumes:
+            - ./mailer:/var/www/html/
+
+    db:
+        container_name: likeDatabase
+        image: mysql:5.7
+        environment:
+            MYSQL_ROOT_PASSWORD: admin1234
+            MYSQL_DATABASE: likes
+            MYSQL_USER: liker
+            MYSQL_PASSWORD: meLikeIt

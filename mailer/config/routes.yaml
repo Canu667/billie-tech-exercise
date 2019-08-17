@@ -1,0 +1,3 @@
+sendEmail:
+    path: /send-email
+    controller: App\Api\Controller\MailController::sendEmail

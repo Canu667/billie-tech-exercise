@@ -31,8 +31,9 @@ class MailController extends AbstractController
     public function sendEmail(Request $request)
     {
         $content = json_decode($request->getContent(), true);
+        $userId = (int) $content['user_id'];
 
-        $response = $this->mailerService->sendEmail((int) $content['user_id']);
+        $response = $this->mailerService->sendEmail($userId);
 
         return $response ? Response::create(null, Response::HTTP_OK) :
             Response::create(null, Response::HTTP_TOO_MANY_REQUESTS);

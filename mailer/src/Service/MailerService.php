@@ -13,11 +13,25 @@ class MailerService
     private $logger;
 
     /**
-     * @param LoggerInterface $logger
+     * @var int
      */
-    public function __construct(LoggerInterface $logger)
+    private $duration;
+
+    /**
+     * @var string
+     */
+    private $filePath;
+
+    /**
+     * @param LoggerInterface $logger
+     * @param int             $duration
+     * @param string          $filePath
+     */
+    public function __construct(LoggerInterface $logger, int $duration, string $filePath)
     {
-        $this->logger = $logger;
+        $this->logger   = $logger;
+        $this->duration = $duration;
+        $this->filePath = $filePath;
     }
 
     /**
@@ -27,15 +41,13 @@ class MailerService
      */
     public function sendEmail(int $userId)
     {
-        $this->logger->debug('Trying to send email for userId: ' . $userId);
+        $this->logger->debug('Trying to send email for userId: ' . $userId);;
 
-        $filename = './mylock.lock';
-
-        $fp = fopen( $filename,"w");
+        $fp = fopen( $this->filePath,"w");
         if (flock($fp, LOCK_EX | LOCK_NB)) {
             $this->logger->debug('Sending the email...');
 
-            sleep(10);
+            sleep($this->duration);
 
             flock($fp, LOCK_UN);
             return true;

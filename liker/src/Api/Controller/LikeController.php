@@ -7,9 +7,11 @@ use App\Api\LikeRequest;
 use App\Api\LikeResponse;
 use App\Entity\Like;
 use App\Repository\LikesRepository;
+use App\Service\LikeService;
 use App\Service\MailerService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -17,23 +19,19 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 class LikeController extends AbstractFOSRestController
 {
     /**
-     * @var LikesRepository
+     * @var LikeService
      */
-    private $likesRepository;
+    private $likeService;
 
     /**
-     * @var MailerService
+     * @var LoggerInterface
      */
-    private $mailerService;
+    private $logger;
 
-    /**
-     * @param LikesRepository $likesRepository
-     * @param MailerService   $mailerService
-     */
-    public function __construct(LikesRepository $likesRepository, MailerService $mailerService)
+    public function __construct(LikeService $likeService, LoggerInterface $logger)
     {
-        $this->likesRepository = $likesRepository;
-        $this->mailerService   = $mailerService;
+        $this->likeService = $likeService;
+        $this->logger      = $logger;
     }
 
     /**
@@ -54,14 +52,7 @@ class LikeController extends AbstractFOSRestController
             return $this->sendBadResponse($validationErrors);
         }
 
-        $like = new Like($likeRequest->getUserId());
-        $this->likesRepository->save($like);
-
-        $userLikes = $this->likesRepository->getTotalLikesForUserId($likeRequest->getUserId());
-
-        $isEmailSent = $this->mailerService->sendEmail($likeRequest->getUserId());
-
-        $response = new LikeResponse($likeRequest->getUserId(),$userLikes,$isEmailSent);
+        $response = $this->likeService->addLikeToUser($likeRequest);
 
         $view     = $this->view($response, Response::HTTP_OK);
         return $this->handleView($view);

@@ -5,6 +5,7 @@ namespace App\Service;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class MailerService
@@ -15,11 +16,14 @@ class MailerService
     private $client;
 
     /**
-     * @param ClientInterface $guzzleClient
+     * @var LoggerInterface
      */
-    public function __construct(ClientInterface $guzzleClient)
+    private $logger;
+
+    public function __construct(ClientInterface $client, LoggerInterface $logger)
     {
-        $this->client = $guzzleClient;
+        $this->client = $client;
+        $this->logger = $logger;
     }
 
     /**
@@ -41,6 +45,8 @@ class MailerService
 
             return true;
         } catch (RequestException $exception) {
+            $this->logger->error($exception);
+
             if ($exception->getCode() === Response::HTTP_TOO_MANY_REQUESTS) {
                 return false;
             }

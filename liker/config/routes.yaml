@@ -2,3 +2,8 @@ rest_controller:
     resource: ../src/Api/Controller
     type: annotation
     prefix: /
+
+openapi_json:
+    path:       /openapi.json
+    controller: App\Api\Controller\ApiController::openApiJson
+    methods:    [GET]

@@ -5,10 +5,16 @@ namespace App\Api;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as Serialization;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Schema(required={"user_id"})
+ */
 class LikeRequest
 {
     /**
+     * @OA\Property(type="string")
+     *
      * @Serialization\Type("int")
      *
      * @Assert\NotNull()

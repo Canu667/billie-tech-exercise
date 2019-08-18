@@ -19,7 +19,8 @@
         "symfony/property-info": "4.3.*",
         "symfony/serializer": "4.3.*",
         "symfony/validator": "4.3.*",
-        "symfony/yaml": "4.3.*"
+        "symfony/yaml": "4.3.*",
+        "zircote/swagger-php": "^3.0"
     },
     "config": {
         "preferred-install": {

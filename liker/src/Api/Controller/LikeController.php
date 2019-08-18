@@ -3,12 +3,9 @@ declare(strict_types=1);
 
 namespace App\Api\Controller;
 
+use OpenApi\Annotations as OA;
 use App\Api\LikeRequest;
-use App\Api\LikeResponse;
-use App\Entity\Like;
-use App\Repository\LikesRepository;
 use App\Service\LikeService;
-use App\Service\MailerService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Psr\Log\LoggerInterface;
@@ -35,6 +32,25 @@ class LikeController extends AbstractFOSRestController
     }
 
     /**
+     * @OA\Post(
+     *     operationId="likeUser",
+     *     description="Adds a like to the user and sends an email",
+     *     tags={"Like"},
+     *     path="/like",
+     *     @OA\RequestBody(
+     *         description="Adds a like to a given user and sends an email",
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/LikeRequest"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *      response="200",
+     *      description="Returns the response",
+     *      @OA\JsonContent(ref="#/components/schemas/LikeResponse")
+     *     ),
+     *   )
+     * )
+     *
      * @Rest\Post("/like")
      * @ParamConverter("likeRequest", converter="fos_rest.request_body")
      *

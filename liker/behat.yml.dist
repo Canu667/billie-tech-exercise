@@ -8,5 +8,5 @@ default:
         Imbo\BehatApiExtension:
             apiClient:
                 base_uri: http://localhost
-                timeout: 5.0
+                timeout: 15.0
                 verify: false
